@@ -1,0 +1,10 @@
+npm init 
+npm i nodemon express 
+npm i mongoose dotenv cors
+extension rest client 
+
+change test to start in packag.json 
+->"scripts": {
+    "start": "nodemon index.js"
+
+.env->change database username and password-> change myfirstproject to mytable 
