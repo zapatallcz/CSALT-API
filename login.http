@@ -1,8 +1,7 @@
-POST http://localhost:8080/CCSUWellness/Register
+POST http://localhost:8080/CCSUWellness/Login
 Content-Type: application/json
 
 {
-    "fullName":"Mariah",
     "email":"mariahlopez593@gmail.com",
     "password":"lauralaura"
 }

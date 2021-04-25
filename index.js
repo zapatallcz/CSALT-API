@@ -12,4 +12,4 @@ mongoose.connect(process.env.DATABASE_ACCESS, () =>console.log("Database connect
 app.use(express.json())
 app.use(cors())
 app.use('/CCSUWellness', routesUrls)
-app.listen(19006, () => console.log("server is up and running"))
+app.listen(8080, () => console.log("server is up and running"))
