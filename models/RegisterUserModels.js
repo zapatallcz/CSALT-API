@@ -26,4 +26,4 @@ const registerUserTemplate = new mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('mytable', registerUserTemplate)
+module.exports = mongoose.model('User', registerUserTemplate)
