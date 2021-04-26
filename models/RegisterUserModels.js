@@ -15,6 +15,10 @@ const registerUserTemplate = new mongoose.Schema({
         type:String,
         required:true
     },
+    livesOnCampus:{
+        type: Boolean,
+        required: true
+    },
     date:{
         type:Date,
         default: Date.now

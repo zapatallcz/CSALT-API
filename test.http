@@ -1,0 +1,9 @@
+POST http://localhost:19009/CCSUWellness/Login
+Content-Type: application/json
+
+{
+    "fullName":"Laura",
+    "email":"mail123@gmail.com",
+    "password":"123456",
+    "livesOnCampus": "true"
+}
