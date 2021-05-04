@@ -30,7 +30,6 @@ router.post('/Register', async (request, response) => {
     .then(data =>{
         const token = jwt.sign({_id: data._id}, process.env.TOKEN_SECRET);
         const user = data.toObject()
-        delete user.password
         response.json({
             token,
             user,
@@ -44,6 +43,7 @@ router.post('/Register', async (request, response) => {
 router.post('/Login', async (request, response) => {
     //Checking if the email already exists
     let user = await registerUserTemplateCopy.findOne({email: request.body.email});
+
     if(!user) return response.status(400).json({message: 'Email/password is incorrect'});
 
     //Checking if password is correct
@@ -54,9 +54,13 @@ router.post('/Login', async (request, response) => {
     const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
     user = user.toObject()
     delete user.password
+
+    const factors = await FactorResponse.find({ userId: user._id});
+
     response.json({
         token,
         user,
+        factors
     })
     
 });
