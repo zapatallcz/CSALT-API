@@ -66,30 +66,39 @@ router.post("/Login", async (request, response) => {
   const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
   user = user.toObject();
   delete user.password;
+
+  const factors = await FactorResponse.find({ userId: user._id });
+
   response.json({
     token,
     user,
+    factors,
   });
 });
 
 router.post("/FactorResponse", async (request, response) => {
-  const factorResponse = new FactorResponse({
+  const filter = {
     userId: request.body.userId,
     factor: request.body.factor,
-    value: parseInt(request.body.value),
-  });
-  factorResponse
-    .save()
-    .then((data) => {
-      console.log("works", data);
-      response.json({
-        success: true,
-      });
-    })
-    .catch((error) => {
-      console.error("error", error);
-      response.json(error);
-    });
+  };
+  // this option instructs the method to create a document if no documents match the filter
+  const options = { upsert: true };
+  // create a document that sets the value to the update value
+  const updateDoc = {
+    $set: {
+      value: parseInt(request.body.value),
+    },
+  };
+  const result = await FactorResponse.updateOne(filter, updateDoc, options);
+  console.log(
+    `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+  );
+
+  if (!result) {
+    response.json("error found");
+    return;
+  }
+  response.json(result);
 });
 
 router.get("/admin", async (request, response) => {
@@ -99,34 +108,20 @@ router.get("/admin", async (request, response) => {
         _id: "$factor",
         value: { $sum: "$value" },
       },
-    //   $match: {
-    //       value: {$lte: 3}
-    //   }
     },
   ];
 
   let factor = await FactorResponse.aggregate(pipeline);
-  //  .then((result)=> {
-  //      console.log(result)
-  //  }).catch((err)=> {
-  //      console.log(err)
-  //  });
-  // if(!factor) return response.status(400).json({message: 'no factors found'});
 
-  // const factorResponseAggregation = FactorResponseModel.aggregate([
-  //     { $group: {
-  //         _id: '$factor',
-  //         value: {$sum: '$value'}
-  //     } },
-  //   ]);
-
-  //   FactorResponseModel.
-  //     aggregate([{ $match: { value: { $lte: 3 }}}]).
-  //     unwind('tags').
-  //     exec(callback);
-
-  // factor = factor.toObject()
   response.json(factor);
+});
+
+router.post("/resources", async (request, response) => {
+  const factors = await FactorResponse.find({
+    userId: request.body.userId,
+    value: { $lte: 3 },
+  });
+  response.json(factors);
 });
 
 module.exports = router;

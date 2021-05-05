@@ -1,9 +1,13 @@
-POST http://localhost:19009/CCSUWellness/Login
+POST http://10.0.0.2:19002/CCSUWellness/CCSUWellness/FactorResponse
 Content-Type: application/json
 
 {
     "fullName":"Laura",
     "email":"mail123@gmail.com",
     "password":"123456",
-    "livesOnCampus": "true"
+    "livesOnCampus": "true",
+
+    "userId": "User",
+    "factor": "health",
+    "value": "3"
 }
